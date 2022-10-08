@@ -42,13 +42,27 @@ struct ContentView: View {
         }
     }
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        NavigationView {
+            List(characters, id: \.char_id) { character in
+                VStack(alignment: .leading) {
+                    Text("Name: \(character.name)")
+                    Text("Nickname: \(character.nickname)")
+                }
+            }
+            .onAppear{
+                Task {
+                    await fetchData()
+                }
+            }
+        }.navigationTitle("Breaking Bad")
+        
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        NavigationView {
+            ContentView()
+        }
     }
 }
