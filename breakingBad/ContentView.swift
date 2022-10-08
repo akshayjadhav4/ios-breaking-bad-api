@@ -20,6 +20,27 @@ struct Character: Codable {
 }
 
 struct ContentView: View {
+    //init state
+    @State private var characters = [Character]()
+    
+    // Create URL and fetch data
+    func fetchData() async {
+        // create a URL
+        guard let url = URL(string: "https://www.breakingbadapi.com/api/characters") else {
+            print("URL does not exist.")
+            return
+        }
+        do {
+            // fetch data
+           let (data, _) = try await URLSession.shared.data(from: url)
+            //decode data
+            if let decodedResponse = try? JSONDecoder().decode([Character].self, from: data) {
+                characters = decodedResponse
+            }
+        } catch {
+            print("Something went wrong...")
+        }
+    }
     var body: some View {
         Text("Hello, world!")
             .padding()
